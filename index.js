@@ -6,7 +6,9 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 require('dotenv').config();
 
+//My Routes
 const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/user');
 
 //DB CONNECTION
 mongoose.connect(process.env.DATABASE).then(() => {
@@ -20,6 +22,7 @@ app.use(cookieParser());
 
 // Routes
 app.use('/api', authRoutes);
+app.use('/api', userRoutes);
 
 // PORT
 const port = process.env.PORT || 8000;
