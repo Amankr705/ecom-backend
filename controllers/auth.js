@@ -84,7 +84,7 @@ exports.isAdmin = (req, res, next) => {
   const { profile } = req;
 
   if(profile.role === 0){
-    return res.status(403).json({ error: 'NOT ADMIN ACCESS' });
+    return res.status(403).json({ error: 'You are not Admin, Access denied' });
   }
 
   next();
