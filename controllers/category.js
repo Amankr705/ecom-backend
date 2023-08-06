@@ -36,8 +36,8 @@ exports.getCategory = (req, res) => {
 
 exports.getAllCategory = async (req, res) => {
   try {
-    const categories = await Category.find({});
-    if (!categories) {
+    const categories = await Category.find();
+    if (categories.length === 0) {
       return res.status(404).json({ error: 'No categories found' });
     }
     res.json(categories);

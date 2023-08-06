@@ -14,9 +14,14 @@ const productRoutes = require('./routes/product');
 const orderRoutes = require('./routes/order');
 
 //DB CONNECTION
-mongoose.connect(process.env.DATABASE).then(() => {
-  console.log('DB CONNECTED');
-});
+mongoose
+  .connect(process.env.DATABASE, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log('DB CONNECTED');
+  });
 
 // Middlewares
 app.use(cors());

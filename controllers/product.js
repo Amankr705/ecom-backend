@@ -5,7 +5,7 @@ const fs = require('fs');
 
 exports.getProductById = async (req, res, next, id) => {
   try {
-    const product = await Product.find(id).exec();
+    const product = await Product.findById(id).exec();
 
     if (!product) {
       return res.status(400).json({ error: 'No Product Found' });
@@ -82,19 +82,27 @@ exports.getProduct = (req, res) => {
 
 //middleware to get photo efficiently & fastly
 exports.photo = (req, res, next) => {
-  if (req.product.data) {
+  // Check if product photo data exists
+  if (req.product.photo && req.product.photo.data) {
+    // Set the appropriate content type based on the product's photo contentType
     res.set('Content-Type', req.product.photo.contentType);
+    
+    // Send the product's photo data as the response
     return res.send(req.product.photo.data);
   }
+
+  // If no product photo data, proceed to the next middleware
   next();
 };
 
+
 exports.updateProduct = async (req, res) => {
-  const form = new formidable.IncomingForm();
+  let form = new formidable.IncomingForm();
   form.keepExtensions = true;
 
   form.parse(req, async (err, fields, file) => {
     if (err) {
+      console.log(err);
       return res.status(400).json({
         err: 'Problem parsing the form data',
       });
@@ -153,9 +161,7 @@ exports.removeProduct = async (req, res) => {
   try {
     let product = req.product;
     await product.deleteOne();
-    res
-      .status(200)
-      .json({ message: `Successfully deleted the ${product.name}product` });
+    res.json({ message: `Successfully deleted the ${product.name} product` });
   } catch (error) {
     res.status(400).json({ error: 'Failed to delete this product' });
   }
